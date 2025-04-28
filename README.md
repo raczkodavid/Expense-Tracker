@@ -48,9 +48,6 @@ See the individual README files in each project directory for detailed setup and
 - Responsive design for mobile and desktop
 - Secure storage of sensitive configuration data
 
-## Screenshots
-
-(Screenshots can be added here)
 
 ## License
 
