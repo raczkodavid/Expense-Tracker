@@ -2,6 +2,7 @@ using System;
 using ExpenseApi.Data;
 using ExpenseApi.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,20 +12,14 @@ string allowVueOrigin = "_allowVueOrigin";
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Load environment variables from .env file in development
-if (builder.Environment.IsDevelopment())
-{
-    DotNetEnv.Env.Load();
-    
-    // Add user secrets in development
-    builder.Configuration.AddUserSecrets<Program>();
-}
+// Load environment variables from .env file
+DotNetEnv.Env.Load();
 
 // Add the db context using mysql
 builder.Services.AddDbContext<ExpenseContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("ExpenseDbContext")
-            ?? throw new InvalidOperationException("Connection string 'ExpenseTrackerContext' not found."),
+            ?? throw new InvalidOperationException("Connection string 'ExpenseDbContext' not found."),
         ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("ExpenseDbContext"))
     )
 );
@@ -71,9 +66,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

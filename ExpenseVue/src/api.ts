@@ -2,7 +2,7 @@ import axios from "axios";
 import type { AxiosInstance } from "axios";
 
 // Get API URL from environment variables, with fallback
-const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5111/api";
+const apiUrl = import.meta.env.VITE_API_URL || "/api";
 
 // create an instance of axios
 const api: AxiosInstance = axios.create({
@@ -12,7 +12,5 @@ const api: AxiosInstance = axios.create({
     "Content-Type": "application/json",
   },
 });
-
-// interceptors (token, error handling, logging) : TODO
 
 export default api;

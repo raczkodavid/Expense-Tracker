@@ -28,10 +28,10 @@
         <thead class="sticky top-0 z-10 bg-base-100">
           <tr class="text-base-content">
             <th class="min-w-[100px] cursor-pointer" @click="sortBy('date')">
-              Date {{ sortIcon('date') }}
+              Date {{ sortIcon("date") }}
             </th>
             <th class="min-w-[80px] cursor-pointer" @click="sortBy('amount')">
-              Amount {{ sortIcon('amount') }}
+              Amount {{ sortIcon("amount") }}
             </th>
             <th class="hidden min-w-[100px] md:table-cell">Category</th>
             <th class="hidden min-w-[120px] lg:table-cell">Description</th>
@@ -111,9 +111,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, watch } from 'vue';
-import type { Transaction } from '@/types/transaction';
-import { TransactionType } from '@/types/transaction';
+import { defineComponent, computed, ref, watch } from "vue";
+import type { Transaction } from "@/types/transaction";
+import { TransactionType } from "@/types/transaction";
 
 /**
  * Component for displaying a table of transactions with filtering, sorting, and pagination.
@@ -125,7 +125,7 @@ import { TransactionType } from '@/types/transaction';
  * @emits {number} delete - Emits transaction ID to delete
  */
 export default defineComponent({
-  name: 'TransactionTable',
+  name: "TransactionTable",
   props: {
     transactions: {
       type: Array as () => Transaction[],
@@ -133,16 +133,16 @@ export default defineComponent({
     },
     filterBy: {
       type: String,
-      default: 'all',
+      default: "all",
     },
   },
-  emits: ['update:filter-by', 'edit', 'delete'],
+  emits: ["update:filter-by", "edit", "delete"],
   setup(props, { emit }) {
     // State
     const currentPage = ref(1);
     const itemsPerPage = 10;
-    const sortField = ref('date');
-    const sortDirection = ref('desc');
+    const sortField = ref("date");
+    const sortDirection = ref("desc");
 
     // Computed properties
     const totalPages = computed(() =>
@@ -152,11 +152,11 @@ export default defineComponent({
     const sortedTransactions = computed(() => {
       return [...props.transactions].sort((a, b) => {
         let comparison = 0;
-        if (sortField.value === 'date') {
+        if (sortField.value === "date") {
           const dateA = new Date(a.date).getTime();
           const dateB = new Date(b.date).getTime();
           comparison = dateA - dateB;
-        } else if (sortField.value === 'amount') {
+        } else if (sortField.value === "amount") {
           // For expenses (type 1), we want to show them as negative values
           const amountA =
             a.type === TransactionType.Expense
@@ -168,7 +168,7 @@ export default defineComponent({
               : Math.abs(b.amount);
           comparison = amountA - amountB;
         }
-        return sortDirection.value === 'asc' ? comparison : -comparison;
+        return sortDirection.value === "asc" ? comparison : -comparison;
       });
     });
 
@@ -184,26 +184,26 @@ export default defineComponent({
     };
 
     const formatAmount = (transaction: Transaction): string => {
-      const prefix = transaction.type === TransactionType.Expense ? '-' : '';
+      const prefix = transaction.type === TransactionType.Expense ? "-" : "";
       return `${prefix}$${transaction.amount.toFixed(2)}`;
     };
 
     const sortIcon = (field: string): string => {
-      if (sortField.value !== field) return '↕';
-      return sortDirection.value === 'asc' ? '↑' : '↓';
+      if (sortField.value !== field) return "↕";
+      return sortDirection.value === "asc" ? "↑" : "↓";
     };
 
     const sortBy = (field: string): void => {
       if (sortField.value === field) {
-        sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc';
+        sortDirection.value = sortDirection.value === "asc" ? "desc" : "asc";
       } else {
         sortField.value = field;
-        sortDirection.value = 'desc';
+        sortDirection.value = "desc";
       }
     };
 
     const updateFilter = (value: string): void => {
-      emit('update:filter-by', value);
+      emit("update:filter-by", value);
     };
 
     // Reset to page 1 when transactions update
